@@ -717,21 +717,25 @@ body::after {
     top: 0.65rem;
     left: 0.65rem;
     bottom: 0.65rem;
-    width: min(78vw, 300px);
+    width: min(72vw, 260px);
     max-width: calc(100vw - 1.3rem);
     height: auto;
     z-index: 60;
     border-radius: 18px;
-    transform: translateX(calc(-100% - 1rem));
+    transform: translateX(calc(-100% - 1rem)) translateZ(0);
     opacity: 0;
     transition: transform 0.26s ease, opacity 0.2s ease;
-    backdrop-filter: saturate(180%) blur(18px);
-    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    backdrop-filter: saturate(180%) blur(18px) !important;
+    -webkit-backdrop-filter: saturate(180%) blur(18px) !important;
+    background: rgb(255 255 255 / 82%);
+    will-change: transform, opacity;
   }
 
   .app-shell.is-mobile-open .app-sidebar {
-    transform: translateX(0);
+    transform: translateX(0) translateZ(0);
     opacity: 1;
+    backdrop-filter: saturate(180%) blur(18px) !important;
+    -webkit-backdrop-filter: saturate(180%) blur(18px) !important;
   }
 
   .mobile-sidebar-backdrop {
@@ -757,7 +761,7 @@ body::after {
   .app-content {
     margin-left: 0;
     max-width: 100%;
-    padding: 1.1rem 0.95rem 1.4rem;
+    padding: 1.2rem 1rem 1.5rem;
     border-radius: 16px;
     backdrop-filter: saturate(180%) blur(16px);
     -webkit-backdrop-filter: saturate(180%) blur(16px);
@@ -768,16 +772,16 @@ body::after {
   }
 
   .doc-content {
-    font-size: 0.98rem;
+    font-size: 0.96rem;
   }
 
   .doc-content h1 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     line-height: 1.18;
   }
 
   .doc-content h2 {
-    font-size: 1.34rem;
+    font-size: 1.3rem;
   }
 
   .doc-content h3 {
@@ -803,34 +807,56 @@ body::after {
 
   .mobile-topbar {
     top: 0.5rem;
-    padding: 0.5rem 0.65rem;
+    padding: 0.45rem 0.6rem;
     border-radius: 12px;
   }
 
   .mobile-menu-toggle {
-    width: 2rem;
-    height: 2rem;
+    width: 1.9rem;
+    height: 1.9rem;
   }
 
   .app-sidebar {
     top: 0.5rem;
     left: 0.5rem;
     bottom: 0.5rem;
-    width: min(84vw, 280px);
+    width: min(78vw, 240px);
     max-width: calc(100vw - 1rem);
     border-radius: 14px;
   }
 
   .app-content {
     border-radius: 14px;
-    padding: 1rem 0.82rem 1.25rem;
+    padding: 1rem 0.8rem 1.25rem;
+  }
+
+  .doc-content pre {
+    font-size: 0.85rem;
+  }
+
+  .doc-content pre code {
+    padding: 0.6rem;
+  }
+
+  .doc-content th,
+  .doc-content td {
+    padding: 0.4rem 0.45rem;
+    font-size: 0.88rem;
   }
 }
 
 @supports not (backdrop-filter: blur(1px)) {
+  .app-sidebar {
+    background: rgb(255 255 255 / 92%);
+  }
+
   .mobile-sidebar-backdrop {
     background: rgb(15 23 42 / 34%);
   }
+}
+
+.app-shell.is-mobile-open {
+  overflow: hidden;
 }
 
 body.mobile-nav-open {
