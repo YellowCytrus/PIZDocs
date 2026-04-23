@@ -2,6 +2,7 @@ import mermaid from 'mermaid'
 
 let initialized = false
 let viewerInitialized = false
+let activeTheme: 'default' | 'dark' = 'default'
 
 type MermaidViewerState = {
   overlay: HTMLDivElement
@@ -17,13 +18,16 @@ type MermaidViewerState = {
 let viewerState: MermaidViewerState | null = null
 
 export function initMermaid() {
-  if (initialized) return
+  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'default'
+  if (initialized && activeTheme === nextTheme) return
+
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: 'loose',
-    theme: 'default',
+    theme: nextTheme,
   })
   initialized = true
+  activeTheme = nextTheme
 }
 
 function applyViewerTransform(state: MermaidViewerState) {
