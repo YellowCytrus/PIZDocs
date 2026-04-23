@@ -3,7 +3,19 @@ import { computed } from 'vue'
 import { useDocsStore } from '@/stores/docs'
 import type { NavNode } from '@/types/docs'
 
-const props = defineProps<{ node: NavNode }>()
+const props = withDefaults(
+  defineProps<{
+    node: NavNode
+    depth?: number
+    index?: number
+    siblingCount?: number
+  }>(),
+  {
+    depth: 0,
+    index: 0,
+    siblingCount: 1,
+  },
+)
 const docsStore = useDocsStore()
 
 const expanded = computed(() => docsStore.isExpanded(props.node))
@@ -11,19 +23,46 @@ const hasChildren = computed(() => props.node.children.length > 0)
 </script>
 
 <template>
-  <li class="sidebar-node">
+  <li
+    class="sidebar-node"
+    :style="{
+      '--tree-depth': String(depth),
+      '--dr-depth': String(depth),
+      '--dr-node-index': String(index),
+      '--dr-node-index-reverse': String(Math.max(0, siblingCount - index - 1)),
+      '--dr-sibling-count': String(siblingCount),
+    }"
+  >
     <div class="node-line">
-      <button v-if="hasChildren" class="toggle" @click="docsStore.toggleNode(node.id)">
-        {{ expanded ? '▾' : '▸' }}
+      <button
+        v-if="hasChildren"
+        class="toggle"
+        :class="{ 'is-expanded': expanded }"
+        type="button"
+        :aria-label="expanded ? `Свернуть ${node.label}` : `Развернуть ${node.label}`"
+        @click="docsStore.toggleNode(node.id)"
+      >
+        <span class="toggle-chevron" aria-hidden="true" />
       </button>
       <span v-else class="toggle-placeholder" />
       <router-link :to="node.routePath" class="node-link">
-        {{ node.label }}
+        <span class="node-link-text">{{ node.label }}</span>
       </router-link>
-      <span v-if="node.hasBrokenLink" class="warning-dot" title="Contains broken links">!</span>
     </div>
-    <ul v-if="hasChildren && expanded">
-      <SidebarTreeNode v-for="child in node.children" :key="child.id" :node="child" />
-    </ul>
+    <transition name="tree-expand">
+      <ul
+        v-if="hasChildren && expanded"
+        :style="{ '--dr-sibling-count': String(node.children.length) }"
+      >
+        <SidebarTreeNode
+          v-for="(child, childIndex) in node.children"
+          :key="child.id"
+          :node="child"
+          :depth="depth + 1"
+          :index="childIndex"
+          :sibling-count="node.children.length"
+        />
+      </ul>
+    </transition>
   </li>
 </template>

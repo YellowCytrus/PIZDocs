@@ -8,7 +8,14 @@ const docsStore = useDocsStore()
 <template>
   <nav class="sidebar-tree">
     <ul>
-      <SidebarTreeNode v-for="node in docsStore.navTree" :key="node.id" :node="node" />
+      <SidebarTreeNode
+        v-for="(node, index) in docsStore.navTree"
+        :key="node.id"
+        :node="node"
+        :depth="0"
+        :index="index"
+        :sibling-count="docsStore.navTree.length"
+      />
     </ul>
   </nav>
 </template>
