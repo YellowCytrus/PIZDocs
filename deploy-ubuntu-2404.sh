@@ -74,6 +74,20 @@ server {
         try_files \$uri \$uri/ /index.html;
     }
 
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache" always;
+        add_header Expires "0" always;
+        try_files \$uri =404;
+    }
+
+    location ~* \.html$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate" always;
+        add_header Pragma "no-cache" always;
+        add_header Expires "0" always;
+        try_files \$uri =404;
+    }
+
     location ~* \.(?:css|js|mjs|map|jpg|jpeg|gif|png|svg|webp|ico|woff2?)$ {
         expires 7d;
         add_header Cache-Control "public, max-age=604800, immutable";
