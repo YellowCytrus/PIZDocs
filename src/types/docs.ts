@@ -44,3 +44,16 @@ export type DocsIndex = {
   brokenLinks: BrokenLink[]
   brokenBySource: Record<string, BrokenLink[]>
 }
+
+export type DocSearchMatchType = 'exact' | 'fuzzy'
+
+export type DocSearchResult = {
+  id: string
+  title: string
+  routePath: string
+  sourcePath: string
+  snippet: string
+  snippetHighlighted: string
+  score: number
+  matchType: DocSearchMatchType
+}

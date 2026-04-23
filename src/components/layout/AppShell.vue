@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import SidebarTree from '@/components/nav/SidebarTree.vue'
+import DocsSearchBox from '@/components/search/DocsSearchBox.vue'
 
 const route = useRoute()
 const isSidebarOpen = ref(false)
@@ -78,6 +79,7 @@ onBeforeUnmount(() => {
   <div class="app-shell" :class="sidebarStateClass">
     <header class="mobile-topbar">
       <router-link class="brand mobile-brand" to="/">PIZDocs</router-link>
+      <DocsSearchBox compact placeholder="Поиск..." />
       <div class="mobile-topbar-actions">
         <button class="theme-toggle" type="button" :aria-label="themeButtonLabel" @click="toggleTheme">
           {{ theme === 'dark' ? '☀️' : '🌙' }}
@@ -102,6 +104,7 @@ onBeforeUnmount(() => {
           {{ theme === 'dark' ? '☀️' : '🌙' }}
         </button>
       </div>
+      <DocsSearchBox />
       <SidebarTree />
       <router-link class="diagnostics-link" to="/_diagnostics">Diagnostics</router-link>
     </aside>

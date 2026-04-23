@@ -30,6 +30,12 @@
   --dr-toggle-color: #365b95;
   --dr-toggle-hover-bg: rgb(219 233 255 / 92%);
   --dr-toggle-hover-border: rgb(140 168 209 / 64%);
+  --dr-search-bg: rgb(255 255 255 / 74%);
+  --dr-search-border: rgb(176 194 220 / 56%);
+  --dr-search-focus: rgb(90 141 217 / 48%);
+  --dr-search-result-bg: rgb(248 252 255 / 96%);
+  --dr-search-result-hover-bg: rgb(224 237 255 / 78%);
+  --dr-search-muted: #58708f;
   --dr-node-link: #495669;
   --dr-node-link-hover: #2a4f88;
   --dr-node-link-hover-bg: rgb(222 235 255 / 48%);
@@ -87,6 +93,12 @@
   --dr-toggle-color: #b9d5ff;
   --dr-toggle-hover-bg: rgb(62 90 136 / 62%);
   --dr-toggle-hover-border: rgb(152 181 229 / 45%);
+  --dr-search-bg: rgb(33 49 79 / 70%);
+  --dr-search-border: rgb(120 149 194 / 36%);
+  --dr-search-focus: rgb(156 196 255 / 56%);
+  --dr-search-result-bg: rgb(20 33 56 / 96%);
+  --dr-search-result-hover-bg: rgb(48 73 114 / 72%);
+  --dr-search-muted: #96abd0;
   --dr-node-link: #c3d1e8;
   --dr-node-link-hover: #e3efff;
   --dr-node-link-hover-bg: rgb(71 101 150 / 36%);
@@ -694,6 +706,121 @@ body::after {
   transform: scale(0.95);
 }
 
+.docs-search {
+  position: relative;
+  margin: 0 0 0.9rem;
+}
+
+.docs-search__label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--dr-search-border);
+  border-radius: 11px;
+  background: var(--dr-search-bg);
+  padding: 0.4rem 0.55rem;
+}
+
+.docs-search__label:focus-within {
+  border-color: var(--dr-search-focus);
+}
+
+.docs-search__icon {
+  font-size: 0.9rem;
+  color: var(--dr-search-muted);
+}
+
+.docs-search__input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--dr-text);
+  font: inherit;
+}
+
+.docs-search__input::placeholder {
+  color: var(--dr-text-soft);
+}
+
+.docs-search__clear {
+  border: 0;
+  background: transparent;
+  color: var(--dr-search-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.docs-search__results {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  right: 0;
+  z-index: 80;
+  border: 1px solid var(--dr-search-border);
+  border-radius: 12px;
+  background: var(--dr-search-result-bg);
+  box-shadow: 0 8px 20px rgb(15 23 42 / 16%);
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 0.35rem;
+  box-sizing: border-box;
+}
+
+.docs-search__result {
+  display: grid;
+  gap: 0.16rem;
+  width: 100%;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.45rem 0.5rem;
+}
+
+.docs-search__result:hover,
+.docs-search__result.is-active {
+  background: var(--dr-search-result-hover-bg);
+}
+
+.docs-search__result-title {
+  color: var(--dr-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.docs-search__result-path,
+.docs-search__result-snippet {
+  color: var(--dr-search-muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.docs-search__result-snippet mark {
+  background: color-mix(in srgb, var(--dr-link) 20%, transparent);
+  color: var(--dr-heading);
+  border-radius: 4px;
+  padding: 0 0.1rem;
+}
+
+.docs-search__result-type {
+  justify-self: start;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.66rem;
+  color: var(--dr-link);
+}
+
+.docs-search__empty {
+  margin: 0;
+  padding: 0.6rem 0.5rem;
+  color: var(--dr-search-muted);
+  font-size: 0.83rem;
+}
+
 @keyframes dr-ambient-float {
   0% {
     transform: translate3d(-1.5%, -1%, 0) scale(1);
@@ -805,6 +932,20 @@ body::after {
     box-shadow: var(--dr-glass-shadow);
   }
 
+  .mobile-topbar .docs-search {
+    flex: 1;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .mobile-topbar .docs-search.is-compact .docs-search__label {
+    padding: 0.34rem 0.48rem;
+  }
+
+  .mobile-topbar .docs-search.is-compact .docs-search__input {
+    font-size: 0.86rem;
+  }
+
   .mobile-brand {
     margin: 0;
     font-size: 1rem;
@@ -893,6 +1034,10 @@ body::after {
     background: transparent;
   }
 
+  .app-sidebar .docs-search {
+    margin-bottom: 0.75rem;
+  }
+
   .mobile-sidebar-backdrop {
     display: block;
     position: fixed;
@@ -964,6 +1109,11 @@ body::after {
     top: 0.5rem;
     padding: 0.45rem 0.6rem;
     border-radius: 12px;
+  }
+
+  .mobile-topbar .docs-search__result-path,
+  .mobile-topbar .docs-search__result-snippet {
+    font-size: 0.74rem;
   }
 
   .mobile-menu-toggle {

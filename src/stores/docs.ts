@@ -2,11 +2,15 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { createDocsIndex } from '@/lib/docsIndexer'
-import type { NavNode } from '@/types/docs'
+import { createDocsSearch } from '@/lib/docsSearch'
+import type { DocSearchResult, NavNode } from '@/types/docs'
 import { docsSource } from 'virtual:docs-source'
 
 export const useDocsStore = defineStore('docs', () => {
   const index = ref(createDocsIndex(docsSource))
+  const searchEngine = createDocsSearch(index.value.pages)
+  const searchQuery = ref('')
+  const searchResults = ref<DocSearchResult[]>([])
   const expanded = useStorage<Record<string, boolean>>('docs-nav-expanded', {})
 
   const rootPage = computed(() => index.value.rootPage)
@@ -22,6 +26,16 @@ export const useDocsStore = defineStore('docs', () => {
 
   const isExpanded = (node: NavNode) => expanded.value[node.id] ?? true
 
+  const runSearch = (query: string) => {
+    searchQuery.value = query
+    searchResults.value = searchEngine.search(query)
+  }
+
+  const clearSearch = () => {
+    searchQuery.value = ''
+    searchResults.value = []
+  }
+
   return {
     index,
     rootPage,
@@ -29,7 +43,11 @@ export const useDocsStore = defineStore('docs', () => {
     brokenLinks,
     orphanPages,
     hasDiagnostics,
+    searchQuery,
+    searchResults,
     toggleNode,
     isExpanded,
+    runSearch,
+    clearSearch,
   }
 })
