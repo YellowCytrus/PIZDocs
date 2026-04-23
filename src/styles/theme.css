@@ -827,15 +827,9 @@ body::after {
   }
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .app-sidebar,
-  .app-content,
-  .mobile-topbar {
-    background: rgb(248 252 255 / 94%);
-  }
-
+@supports not (backdrop-filter: blur(1px)) {
   .mobile-sidebar-backdrop {
-    background: rgb(15 23 42 / 42%);
+    background: rgb(15 23 42 / 34%);
   }
 }
 
