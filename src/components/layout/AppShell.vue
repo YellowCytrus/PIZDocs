@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="app-shell" :class="sidebarStateClass">
     <header class="mobile-topbar">
-      <router-link class="brand mobile-brand" to="/">PIZDocs</router-link>
+      <router-link class="brand mobile-brand" to="/">PizDOCs</router-link>
       <DocsSearchBox compact placeholder="Поиск..." />
       <div class="mobile-topbar-actions">
         <button class="theme-toggle" type="button" :aria-label="themeButtonLabel" @click="toggleTheme">
@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
     </header>
     <aside class="app-sidebar" @click="handleSidebarClick">
       <div class="sidebar-header">
-        <router-link class="brand" to="/">PIZDocs</router-link>
+        <router-link class="brand" to="/">PizDOCs</router-link>
         <button class="theme-toggle" type="button" :aria-label="themeButtonLabel" @click="toggleTheme">
           {{ theme === 'dark' ? '☀️' : '🌙' }}
         </button>
