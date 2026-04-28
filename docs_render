@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+
+usage() {
+  echo "Usage: docs_render <path/to/docs/folder> [-p <port>]"
+  echo
+  echo "Examples:"
+  echo "  docs_render path/to/docs/folder"
+  echo "  docs_render path/to/docs/folder -p 5173"
+}
+
+if [[ $# -eq 1 && ( "$1" == "-h" || "$1" == "--help" ) ]]; then
+  usage
+  exit 0
+fi
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 1
+fi
+
+docs_path="$1"
+shift
+
+if [[ "$docs_path" == -* ]]; then
+  echo "Error: first argument must be path to docs folder" >&2
+  usage
+  exit 1
+fi
+
+if [[ ! -d "$docs_path" ]]; then
+  echo "Error: docs folder does not exist: $docs_path" >&2
+  exit 1
+fi
+
+port="5180"
+
+while getopts ":p:h" opt; do
+  case "$opt" in
+    p)
+      if [[ ! "$OPTARG" =~ ^[0-9]+$ ]]; then
+        echo "Error: port must be a number, got: $OPTARG" >&2
+        exit 1
+      fi
+      port="$OPTARG"
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    :)
+      echo "Error: option -$OPTARG requires a value" >&2
+      usage
+      exit 1
+      ;;
+    \?)
+      echo "Error: unknown option -$OPTARG" >&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+if (( OPTIND <= $# + 1 )); then
+  shift $((OPTIND - 1))
+fi
+
+if [[ $# -gt 0 ]]; then
+  echo "Error: unexpected argument(s): $*" >&2
+  usage
+  exit 1
+fi
+
+DOCS_ROOT="$docs_path" npm run dev --prefix "$SCRIPT_DIR" -- --port "$port"
